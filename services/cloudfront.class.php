@@ -673,7 +673,7 @@ class AmazonCloudFront extends CloudFusion
 		}
 		elseif (isset($xml->OriginAccessIdentity))
 		{
-			$update->addChild('OriginAccessIdentity', 'origin-access-identity/cloudfront/' . $xml->OriginAccessIdentity);
+			$update->addChild('OriginAccessIdentity', $xml->OriginAccessIdentity);
 		}
 
 		// Trusted Signers
