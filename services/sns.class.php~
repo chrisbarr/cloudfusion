@@ -93,16 +93,16 @@ class AmazonSNS extends CloudFusion
 		$method = HTTP_GET;
 		
 		// Add in required params
-		$opt['Action'] = $action;
-		$opt['AWSAccessKeyId'] = $this->key;
-		$opt['Timestamp'] = gmdate('Y-m-d\TH:i:s\Z');
-		$opt['SignatureVersion'] = 2;
-		$opt['SignatureMethod'] = 'HmacSHA256';
+		$params['Action'] = $action;
+		$params['AWSAccessKeyId'] = $this->key;
+		$params['Timestamp'] = gmdate('Y-m-d\TH:i:s\Z');
+		$params['SignatureVersion'] = 2;
+		$params['SignatureMethod'] = 'HmacSHA256';
 		
 		// Sort and encode into string
-		uksort($opt, 'strnatcmp');
+		uksort($params, 'strnatcmp');
 		$queryString = '';
-		foreach ($opt as $key => $val)
+		foreach ($params as $key => $val)
 		{
 			$queryString .= "&{$key}=".rawurlencode($val);
 		}
@@ -115,13 +115,13 @@ class AmazonSNS extends CloudFusion
 			. $queryString;
 		
 		// Create signature - Version 2
-		$opt['Signature'] = base64_encode(
+		$params['Signature'] = base64_encode(
 			hash_hmac('sha256', $requestString, $this->secret_key, true)
 		);
 		
 		// Finally create request
 		$request_url = 'http://'.$this->hostname.'/?' . http_build_query(
-			$opt
+			$params
 		);
 		
 		// Gather information to pass along to other classes.
